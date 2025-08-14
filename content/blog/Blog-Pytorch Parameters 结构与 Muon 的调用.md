@@ -1,6 +1,6 @@
 +++
 title = "Pytorch Parameters 结构与 Muon 的调用"
-date = "2025.8.8"
+date = "2025-08-08"
 
 tags = ["PyTorch", "Muon", "Machine Learning"]
 +++
