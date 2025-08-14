@@ -2,6 +2,7 @@
 title = "Pytorch Parameters 结构与 Muon 的调用"
 date = "2025-08-08"
 
+[taxonomies]
 tags = ["PyTorch", "Muon", "Machine Learning"]
 +++
 
