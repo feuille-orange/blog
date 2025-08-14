@@ -10,7 +10,7 @@ tags =  ["Machine Learning", "MAE", "Computer Vision"]
 
 近期想将我们设计的优化器在 MAE + ViTs 预训练上进行测试，原本想用 `Hugging Face`​ 的 `transformers`​ 自带的 `run_mae.py`​ （见 [transformers/examples/pytorch/image-pretraining](https://github.com/huggingface/transformers/tree/main/examples/pytorch/image-pretraining)）进行测试，结果测试出来发现表现不是太好（不知道是不是我哪里搞错了）。比如在 CIFAR-10 上进行预训练，几个 Epoch （对应 200 个 global step） 后 train loss 就不下降了。
 
-![train-loss-mae-vit-cifar10-epoch50](assets/train-loss-mae-vit-cifar10-epoch50-20250730091452-ntqwezp.png)​
+![train-loss-mae-vit-cifar10-epoch50](./assets/train-loss-mae-vit-cifar10-epoch50-20250730091452-ntqwezp.png)​
 
 而 Facebook 的官方 `mae`​ 不带训练日志，而且环境有点儿过于古老了，装起来容易遇到各种 Bug。最后找到了 [pengzhiliang/MAE-pytorch](https://github.com/pengzhiliang/MAE-pytorch) 感觉可以用来测试一下，包含完整的训练日志。
 
