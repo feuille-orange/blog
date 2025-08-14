@@ -41,7 +41,7 @@ jobs:
       # 这是最关键的一步！
       # --features indexing-zh 会开启中文分词功能
       - name: Install Zola with Chinese indexing
-        run: cargo install zola --git https://github.com/getzola/zola.git --features indexing-zh
+        run: cargo install zola --git https://github.com/getzola/zola.git --features indexing-zh --force
 
       # 5. 构建 Zola 网站
       # 这里会使用上一步安装的、我们定制的 Zola 版本
