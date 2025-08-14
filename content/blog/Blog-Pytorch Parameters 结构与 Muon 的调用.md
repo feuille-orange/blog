@@ -1,4 +1,11 @@
-# Blog-Pytorch Parameters 结构与 Muon 的调用
++++
+title = "Pytorch Parameters 结构与 Muon 的调用"
+date = "2025.8.8"
+
+tags = ["PyTorch", "Muon", "Machine Learning"]
++++
+
+# 
 
 近期想测试 [Muon](https://github.com/KellerJordan/Muon) 优化器的效果，看了下 Muon 官方 Github 的实现，发现无法像 Adam 或者 AdamW 那样直接简单地调用。还是要学习一下 `pytorch`​ 中 `model.parameters()`​ 的结构，最终搞明白如何使用 `Muon`​ 优化器。
 
