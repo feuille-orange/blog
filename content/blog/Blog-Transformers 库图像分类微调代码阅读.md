@@ -1,4 +1,10 @@
-# Blog-Transformers 库图像分类微调代码阅读
++++
+title = "Transformers 库图像分类微调代码阅读"
+date = "2025-08-12"
+
+[taxonomies]
+tags = ["Machine Learning", "Transformers Library", "Fine Tuning", "Computer Vision"]
++++
 
 近期想做一些图像大模型微调的测试，找到了 Hugging Face 的 transformers 仓库中有一些现成的脚本可以进行微调，因此在此详细阅读和解析下使用的代码。具体代码见 [transformers/examples/pytorch/image-classification at main · huggingface/transformers](https://github.com/huggingface/transformers/tree/main/examples/pytorch/image-classification)。
 
