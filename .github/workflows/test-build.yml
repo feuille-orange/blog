@@ -1,18 +1,55 @@
+# .github/workflows/your-action-file.yml
+
 name: Zola on GitHub Pages
 
-on: 
- push:
-  branches:
-   - main
+on:
+  push:
+    branches:
+      - main # 或者你的主分支名，比如 master
 
 jobs:
   build:
     name: Publish site
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout main
-      uses: actions/checkout@v4
-    - name: Build and deploy
-      uses: shalzz/zola-deploy-action@v0.21.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 1. 检出你的博客源码
+      - name: Checkout main
+        uses: actions/checkout@v4
+
+      # 2. 安装 Rust 环境
+      # 这是编译 Zola 所必需的
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      # 3. 缓存 Cargo 目录
+      # 这是一个优化步骤，可以大大加快未来工作流的运行速度
+      # 它会缓存上次编译的依赖，避免每次都重新下载和编译
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      # 4. 编译并安装带有中文索引功能的 Zola
+      # 这是最关键的一步！
+      # --features indexing-zh 会开启中文分词功能
+      - name: Install Zola with Chinese indexing
+        run: cargo install zola --git https://github.com/getzola/zola.git --features indexing-zh
+
+      # 5. 构建 Zola 网站
+      # 这里会使用上一步安装的、我们定制的 Zola 版本
+      - name: Build site
+        run: zola build
+
+      # 6. 部署到 GitHub Pages
+      # 这个 action 会把 `public` 目录的内容推送到 `gh-pages` 分支
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public # Zola 生成的静态文件目录
