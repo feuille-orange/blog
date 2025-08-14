@@ -41,7 +41,7 @@ jobs:
       # - 移除了 `--force`，否则每次都会强制重新安装，让缓存失效
       - name: Install Zola with Chinese indexing
         if: steps.cache-zola.outputs.cache-hit != 'true'
-        run: cargo install zola --git https://github.com/getzola/zola.git --features search/indexing-zh 
+        run: cargo install zola --git https://github.com/getzola/zola.git --features indexing-zh 
 
       # 5. 构建 Zola 网站
       - name: Build site
