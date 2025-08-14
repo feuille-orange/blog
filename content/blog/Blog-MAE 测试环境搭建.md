@@ -1,4 +1,10 @@
-# Blog-MAE 测试环境搭建
++++
+title = "MAE 测试环境搭建"
+date = "2025-07-29"
+
+[taxonomies]
+tags =  ["Machine Learning", "MAE", "Computer Vision"]
++++
 
 ## 背景
 
