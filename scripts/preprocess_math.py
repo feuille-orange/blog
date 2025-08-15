@@ -5,22 +5,23 @@ import sys
 def process_markdown_file(filepath):
     """
     读取一个 Markdown 文件，处理非代码块、非转义美元区域中数学公式的
-    下划线、星号和换行符，并写回文件。
+    特殊字符，以避免与 Markdown 语法冲突。
     """
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             original_content = f.read()
 
         # --- 第 1 步：保护已转义的美元符号 ---
+        # 存储 `\$` 或 `\$\$`，防止它们被误认为是数学公式分隔符。
         escaped_dollars = []
         def store_escaped_dollar(match):
             escaped_dollars.append(match.group(0))
             return f"__ESCAPED_DOLLAR_{len(escaped_dollars) - 1}__"
         
-        # 匹配 `\$` 或 `\$\$`
         content_no_escapes = re.sub(r'\\(\$\$|\$)', store_escaped_dollar, original_content)
 
         # --- 第 2 步：保护所有代码块 ---
+        # 存储 ` ```...``` 和 ` `...` ` 中的内容，防止其中的字符被错误处理。
         code_blocks = []
         def store_code_block(match):
             code_blocks.append(match.group(0))
@@ -32,23 +33,32 @@ def process_markdown_file(filepath):
         # --- 第 3 步：在清理后的文本上安全地处理数学公式 ---
         def escape_special_chars_in_math(match):
             """
-            转义数学公式内容中的下划线、星号，并处理换行符。
+            转义数学公式内容中的特殊 Markdown 字符。
             """
             start_delim, content, end_delim = match.groups()
             
-            # 首先，处理下划线：将不是由反斜杠开头的 `_` 替换为 `\_`
-            escaped_content = re.sub(r'(?<!\\)_', r'\\_', content)
+            processed_content = content
+
+            # --- 新增：处理行首的减号，防止被解析为列表 ---
+            # 这个问题只出现在 $$...$$（显示模式）的多行公式中。
+            if start_delim == '$$':
+                # 使用 re.MULTILINE 标志，使 `^` 能够匹配每行的开头。
+                # `\s*` 用于处理可能存在的前导空格。
+                # 将行首的 `-` 替换为 `\-`，这样 Markdown 解析器会将其
+                # 视为普通文本，而不是列表项的开始。
+                processed_content = re.sub(r'^\s*-', r'\\-', processed_content, flags=re.MULTILINE)
             
-            # 接着，处理星号：将不是由反斜杠开头的 `*` 替换为 `\*`
-            escaped_content = re.sub(r'(?<!\\)\*', r'\\*', escaped_content)
+            # 处理下划线：将不是由反斜杠开头的 `_` 替换为 `\_`
+            processed_content = re.sub(r'(?<!\\)_', r'\\_', processed_content)
             
-            # --- 新增：处理 LaTeX 换行符 ---
-            # 最后，处理换行符：将 `\\` 替换为 `\\\\`。
-            # 这样 Markdown 处理器会将其解析为 `\\`，从而被 KaTeX 正确识别。
-            # 使用 re.sub 并用 `r'\\\\'` 匹配精确的两个反斜杠，避免错误替换 `\alpha` 等命令。
-            escaped_content = re.sub(r'\\\\', r'\\\\\\\\', escaped_content)
+            # 处理星号：将不是由反斜杠开头的 `*` 替换为 `\*`
+            processed_content = re.sub(r'(?<!\\)\*', r'\\*', processed_content)
             
-            return f"{start_delim}{escaped_content}{end_delim}"
+            # 处理 LaTeX 换行符：将 `\\` 替换为 `\\\\`。
+            # Markdown 会将 `\\\\` 解析为 `\\`，KaTeX 才能正确识别为换行。
+            processed_content = re.sub(r'\\\\', r'\\\\\\\\', processed_content)
+            
+            return f"{start_delim}{processed_content}{end_delim}"
 
         # 使用非贪婪匹配来查找由 $...$ 或 $$...$$ 包围的数学公式
         math_pattern = re.compile(r'(\$\$|\$)(.*?)(\1)', re.DOTALL)
