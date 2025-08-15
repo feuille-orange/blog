@@ -4,7 +4,7 @@ title = "Reading-连续学习的最优控制方式"
 
 date = "2025-08-15"
 
-[texonomies]
+[taxonomies]
 
 tags = ["Machine Learning", "Continual Learning", "Optimal Control"]
 
