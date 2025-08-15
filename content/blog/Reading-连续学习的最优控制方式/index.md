@@ -49,15 +49,17 @@ where $(\boldsymbol{x}, y^{(t)})$ is a sample, $\hat{y}^{(t)}$ is the prediction
 **Overlaps Variables**: The above generalization error depends only through the preactivations
 
 $$
-\lambda_k := \frac{\boldsymbol{x} \cdot \boldsymbol{w}_k}{\sqrt{N}}\,, \quad k = 1, \ldots, K\,, \qquad \text{and} \qquad \lambda_*^{(t)} := \frac{\boldsymbol{x} \cdot \boldsymbol{w}_*^{(t)}}{\sqrt{N}}\,, \quad t = 1, \ldots, T.
+\lambda_k := \frac{\boldsymbol{x} \cdot \boldsymbol{w}_k}{\sqrt{N}}, \quad k = 1, \ldots, K, \qquad \text{and} \qquad \lambda_*^{(t)} := \frac{\boldsymbol{x} \cdot \boldsymbol{w}_*^{(t)}}{\sqrt{N}}, \quad t = 1, \ldots, T.
 $$
 
 They define jointly Gaussian variables with zero mean and second moments given by
 
 $$
-M_{kt} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_*^{(t)} \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_*^{(t)}}{N} \,, \\
-Q_{kh} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_h \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_h}{N} \,, \\
-S_{tt'} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_*^{(t)} \lambda_*^{(t')} \right] = \frac{\boldsymbol{w}_*^{(t)} \cdot \boldsymbol{w}_*^{(t')}}{N} \,,
+\begin{aligned}
+&M_{kt} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_*^{(t)} \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_*^{(t)}}{N} , \\
+&Q_{kh} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_h \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_h}{N} , \\
+&S_{tt'} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_*^{(t)} \lambda_*^{(t')} \right] = \frac{\boldsymbol{w}_*^{(t)} \cdot \boldsymbol{w}_*^{(t')}}{N} ,
+\end{aligned}
 $$
 
 called *overlaps* in the statistical physics literature. Therefore, the dynamics of the generalization error is entirely captured by the evolution of the readouts $\boldsymbol{V}$ and the overlaps.
