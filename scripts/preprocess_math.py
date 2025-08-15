@@ -4,7 +4,7 @@ import sys
 
 def process_markdown_file(filepath):
     """
-    读取一个 Markdown 文件，仅处理非代码块、非转义美元区域中数学公式的下划线，并写回文件。
+    读取一个 Markdown 文件，处理非代码块、非转义美元区域中数学公式的下划线和星号，并写回文件。
     """
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
@@ -29,13 +29,26 @@ def process_markdown_file(filepath):
         content_no_code = code_pattern.sub(store_code_block, content_no_escapes)
 
         # --- 第 3 步：在清理后的文本上安全地处理数学公式 ---
-        def escape_underscores_in_math(match):
+        def escape_special_chars_in_math(match):
+            """
+            转义数学公式内容中的下划线和星号。
+            """
             start_delim, content, end_delim = match.groups()
+            
+            # 首先，处理下划线：将不是由反斜杠开头的 `_` 替换为 `\_`
             escaped_content = re.sub(r'(?<!\\)_', r'\\_', content)
+            
+            # --- 新增：处理星号 ---
+            # 接着，处理星号：将不是由反斜杠开头的 `*` 替换为 `\*`
+            # 这个操作在处理完下划线的内容上继续进行
+            escaped_content = re.sub(r'(?<!\\)\*', r'\\*', escaped_content)
+            
             return f"{start_delim}{escaped_content}{end_delim}"
 
+        # 使用非贪婪匹配来查找由 $...$ 或 $$...$$ 包围的数学公式
         math_pattern = re.compile(r'(\$\$|\$)(.*?)(\1)', re.DOTALL)
-        processed_content = math_pattern.sub(escape_underscores_in_math, content_no_code)
+        # 将函数名从 escape_underscores_in_math 改为 escape_special_chars_in_math
+        processed_content = math_pattern.sub(escape_special_chars_in_math, content_no_code)
 
         # --- 第 4 步：按相反顺序恢复内容 ---
         # 恢复代码块
@@ -75,6 +88,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         content_dir = sys.argv[1]
     else:
-        content_dir = 'content'
+        # 如果没有提供路径，则默认为 'content' 目录
+        content_dir = 'content' 
     
     main(content_dir)
