@@ -56,8 +56,8 @@ They define jointly Gaussian variables with zero mean and second moments given b
 
 $$
 \begin{aligned}
-&M_{kt} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_*^{(t)} \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_*^{(t)}}{N} , \\
-&Q_{kh} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_h \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_h}{N} , \\
+&M_{kt} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_*^{(t)} \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_*^{(t)}}{N} , \\\\
+&Q_{kh} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_h \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_h}{N} , \\\\
 &S_{tt'} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_*^{(t)} \lambda_*^{(t')} \right] = \frac{\boldsymbol{w}_*^{(t)} \cdot \boldsymbol{w}_*^{(t')}}{N} ,
 \end{aligned}
 $$
