@@ -25,6 +25,9 @@ jobs:
 
       - name: Pre-process Markdown for MathJax/KaTeX 🔧
         run: python scripts/preprocess_math.py
+      
+      - name: Pre-process Markdown for Images 🖼️
+        run: python scripts/display_image_title.py
 
       # 2. 安装 Rust 环境
       - name: Install Rust
