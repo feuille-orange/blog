@@ -2,50 +2,55 @@ import os
 import re
 import sys
 
-def escape_underscores_in_math(match):
-    """
-    一个回调函数，用于 re.sub。
-    它接收一个匹配对象，该对象已经通过捕获组分离了定界符和内容。
-    """
-    # match.group(1) 是开头的定界符 ($$ 或 $)
-    # match.group(2) 是公式的实际内容
-    # match.group(3) 是结尾的定界符 ($$ 或 $)
-    start_delim = match.group(1)
-    content = match.group(2)
-    end_delim = match.group(3)
-
-    # 核心逻辑：只替换内容中前面不是反斜杠的下划线
-    # 这个负向先行断言 `(?<!\\)` 写得非常好，我们继续保留
-    escaped_content = re.sub(r'(?<!\\)_', r'\\_', content)
-
-    # 将处理后的内容与原来的定界符重新组合起来
-    return f"{start_delim}{escaped_content}{end_delim}"
-
-
 def process_markdown_file(filepath):
     """
-    读取一个 Markdown 文件，处理其中数学公式的下划线，并写回文件。
+    读取一个 Markdown 文件，仅处理非代码块、非转义美元区域中数学公式的下划线，并写回文件。
     """
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             original_content = f.read()
 
-        # 优化后的正则表达式：
-        # 使用捕获组来分离定界符和内容。
-        # (\$\$|\$) 捕获开始的 $$ 或 $
-        # (.*?)    捕获中间的所有内容（非贪婪）
-        # (\$\$|\$) 捕获结束的 $$ 或 $
-        # 使用 re.DOTALL 使得 `.` 可以匹配换行符，这对于块级公式很重要
-        math_pattern = re.compile(r'(\$\$|\$)(.*?)(\1)', re.DOTALL)
+        # --- 第 1 步：保护已转义的美元符号 ---
+        escaped_dollars = []
+        def store_escaped_dollar(match):
+            escaped_dollars.append(match.group(0))
+            return f"__ESCAPED_DOLLAR_{len(escaped_dollars) - 1}__"
         
-        # 使用 re.sub 和回调函数进行智能替换
-        new_content = math_pattern.sub(escape_underscores_in_math, original_content)
+        # 匹配 `\$` 或 `\$\$`
+        content_no_escapes = re.sub(r'\\(\$\$|\$)', store_escaped_dollar, original_content)
 
-        # 如果内容有变化，则写回文件
-        if new_content != original_content:
+        # --- 第 2 步：保护所有代码块 ---
+        code_blocks = []
+        def store_code_block(match):
+            code_blocks.append(match.group(0))
+            return f"__CODE_BLOCK_{len(code_blocks) - 1}__"
+
+        code_pattern = re.compile(r'```.*?```|`.*?`', re.DOTALL)
+        content_no_code = code_pattern.sub(store_code_block, content_no_escapes)
+
+        # --- 第 3 步：在清理后的文本上安全地处理数学公式 ---
+        def escape_underscores_in_math(match):
+            start_delim, content, end_delim = match.groups()
+            escaped_content = re.sub(r'(?<!\\)_', r'\\_', content)
+            return f"{start_delim}{escaped_content}{end_delim}"
+
+        math_pattern = re.compile(r'(\$\$|\$)(.*?)(\1)', re.DOTALL)
+        processed_content = math_pattern.sub(escape_underscores_in_math, content_no_code)
+
+        # --- 第 4 步：按相反顺序恢复内容 ---
+        # 恢复代码块
+        for i, block in reversed(list(enumerate(code_blocks))):
+            processed_content = processed_content.replace(f"__CODE_BLOCK_{i}__", block, 1)
+        
+        # 恢复已转义的美元符号
+        for i, dollar in reversed(list(enumerate(escaped_dollars))):
+            processed_content = processed_content.replace(f"__ESCAPED_DOLLAR_{i}__", dollar, 1)
+
+        # --- 最后：如果内容有变化，则写回文件 ---
+        if processed_content != original_content:
             print(f'  -> Modifying: {filepath}')
             with open(filepath, 'w', encoding='utf-8') as f:
-                f.write(new_content)
+                f.write(processed_content)
 
     except Exception as e:
         print(f"Error processing file {filepath}: {e}")
@@ -67,8 +72,6 @@ def main(directory):
     print("Processing complete.")
 
 if __name__ == '__main__':
-    # Zola 的内容通常在 'content' 目录下
-    # 您也可以通过命令行参数传入目录，例如：python your_script.py path/to/your/content
     if len(sys.argv) > 1:
         content_dir = sys.argv[1]
     else:
