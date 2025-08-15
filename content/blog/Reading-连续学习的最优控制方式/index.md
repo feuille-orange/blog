@@ -41,7 +41,7 @@ tags = ["Machine Learning", "Continual Learning", "Optimal Control"]
 **Generalization Error**: The generalization error of the student on task $t$ is given by
 
 $$
-\varepsilon_t(\bm{W}, \bm{V}, \bm{W}_*) := \frac{1}{2} \left\langle \left( y^{(t)} - \hat{y}^{(t)} \right)^2 \right\rangle = \frac{1}{2} \mathbb{E}_{\bm{x}} \left[ \left( g_* \left( \frac{\bm{w}_*^{(t)} \cdot \bm{x}}{\sqrt{N}} \right) - \hat{y}(\bm{x}; \bm{W}, \bm{v}^{(t)}) \right)^2 \right].
+\varepsilon_t(\boldsymbol{W}, \boldsymbol{V}, \boldsymbol{W}_*) := \frac{1}{2} \left\langle \left( y^{(t)} - \hat{y}^{(t)} \right)^2 \right\rangle = \frac{1}{2} \mathbb{E}_{\boldsymbol{x}} \left[ \left( g_* \left( \frac{\boldsymbol{w}_*^{(t)} \cdot \boldsymbol{x}}{\sqrt{N}} \right) - \hat{y}(\boldsymbol{x}; \boldsymbol{W}, \boldsymbol{v}^{(t)}) \right)^2 \right].
 $$
 
 where $(\boldsymbol{x}, y^{(t)})$ is a sample, $\hat{y}^{(t)}$ is the prediction, the angular brackets $\langle \cdot \rangle$ denote the expectation over the input distribution.
@@ -49,15 +49,15 @@ where $(\boldsymbol{x}, y^{(t)})$ is a sample, $\hat{y}^{(t)}$ is the prediction
 **Overlaps Variables**: The above generalization error depends only through the preactivations
 
 $$
-\lambda_k := \frac{\bm{x} \cdot \bm{w}_k}{\sqrt{N}}\,, \quad k = 1, \ldots, K\,, \qquad \text{and} \qquad \lambda_*^{(t)} := \frac{\bm{x} \cdot \bm{w}_*^{(t)}}{\sqrt{N}}\,, \quad t = 1, \ldots, T.
+\lambda_k := \frac{\boldsymbol{x} \cdot \boldsymbol{w}_k}{\sqrt{N}}\,, \quad k = 1, \ldots, K\,, \qquad \text{and} \qquad \lambda_*^{(t)} := \frac{\boldsymbol{x} \cdot \boldsymbol{w}_*^{(t)}}{\sqrt{N}}\,, \quad t = 1, \ldots, T.
 $$
 
 They define jointly Gaussian variables with zero mean and second moments given by
 
 $$
-M_{kt} := \mathbb{E}_{\bm{x}} \left[ \lambda_k \lambda_*^{(t)} \right] = \frac{\bm{w}_k \cdot \bm{w}_*^{(t)}}{N} \,, \\
-Q_{kh} := \mathbb{E}_{\bm{x}} \left[ \lambda_k \lambda_h \right] = \frac{\bm{w}_k \cdot \bm{w}_h}{N} \,, \\
-S_{tt'} := \mathbb{E}_{\bm{x}} \left[ \lambda_*^{(t)} \lambda_*^{(t')} \right] = \frac{\bm{w}_*^{(t)} \cdot \bm{w}_*^{(t')}}{N} \,,
+M_{kt} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_*^{(t)} \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_*^{(t)}}{N} \,, \\
+Q_{kh} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_k \lambda_h \right] = \frac{\boldsymbol{w}_k \cdot \boldsymbol{w}_h}{N} \,, \\
+S_{tt'} := \mathbb{E}_{\boldsymbol{x}} \left[ \lambda_*^{(t)} \lambda_*^{(t')} \right] = \frac{\boldsymbol{w}_*^{(t)} \cdot \boldsymbol{w}_*^{(t')}}{N} \,,
 $$
 
 called *overlaps* in the statistical physics literature. Therefore, the dynamics of the generalization error is entirely captured by the evolution of the readouts $\boldsymbol{V}$ and the overlaps.
