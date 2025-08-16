@@ -1,13 +1,9 @@
 +++
-
 title = "Hugging Face trl 微调库 SFT 代码阅读"
-
 date = "2025-08-16"
 
 [taxonomies]
-
 tags = ["Fine Tuning", "Machine Learning", "TRL Library"]
-
 ‍+++
 
 ## SFT 代码阅读
