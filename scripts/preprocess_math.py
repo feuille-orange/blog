@@ -39,13 +39,8 @@ def process_markdown_file(filepath):
             
             processed_content = content
 
-            # --- 新增：处理行首的减号，防止被解析为列表 ---
-            # 这个问题只出现在 $$...$$（显示模式）的多行公式中。
+            # 处理行首的减号，防止被解析为列表
             if start_delim == '$$':
-                # 使用 re.MULTILINE 标志，使 `^` 能够匹配每行的开头。
-                # `\s*` 用于处理可能存在的前导空格。
-                # 将行首的 `-` 替换为 `\-`，这样 Markdown 解析器会将其
-                # 视为普通文本，而不是列表项的开始。
                 processed_content = re.sub(r'^\s*-', r'\\-', processed_content, flags=re.MULTILINE)
             
             # 处理下划线：将不是由反斜杠开头的 `_` 替换为 `\_`
@@ -54,6 +49,12 @@ def process_markdown_file(filepath):
             # 处理星号：将不是由反斜杠开头的 `*` 替换为 `\*`
             processed_content = re.sub(r'(?<!\\)\*', r'\\*', processed_content)
             
+            # --- 新增：处理 LaTeX 双竖线 ---
+            # 将 `\|` 替换为 `\\|`。
+            # Markdown 会将 `\\|` 解析为 `\|`，KaTeX 才能正确识别。
+            # 这个替换必须在处理 `\\` 之前进行，以避免冲突。
+            processed_content = re.sub(r'\\\|', r'\\\\|', processed_content)
+
             # 处理 LaTeX 换行符：将 `\\` 替换为 `\\\\`。
             # Markdown 会将 `\\\\` 解析为 `\\`，KaTeX 才能正确识别为换行。
             processed_content = re.sub(r'\\\\', r'\\\\\\\\', processed_content)
