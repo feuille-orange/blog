@@ -48,16 +48,16 @@ def process_markdown_file(filepath):
             
             # 处理星号：将不是由反斜杠开头的 `*` 替换为 `\*`
             processed_content = re.sub(r'(?<!\\)\*', r'\\*', processed_content)
+
+            # 处理 LaTeX 换行符：将 `\\` 替换为 `\\\\`。
+            # Markdown 会将 `\\\\` 解析为 `\\`，KaTeX 才能正确识别为换行。
+            processed_content = re.sub(r'\\\\', r'\\\\\\\\', processed_content)
             
             # --- 新增：处理 LaTeX 双竖线 ---
             # 将 `\|` 替换为 `\\|`。
             # Markdown 会将 `\\|` 解析为 `\|`，KaTeX 才能正确识别。
             # 这个替换必须在处理 `\\` 之前进行，以避免冲突。
             processed_content = re.sub(r'\\\|', r'\\\\|', processed_content)
-
-            # 处理 LaTeX 换行符：将 `\\` 替换为 `\\\\`。
-            # Markdown 会将 `\\\\` 解析为 `\\`，KaTeX 才能正确识别为换行。
-            processed_content = re.sub(r'\\\\', r'\\\\\\\\', processed_content)
             
             return f"{start_delim}{processed_content}{end_delim}"
 
