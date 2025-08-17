@@ -15,7 +15,7 @@ tags = ["Optimization"]
 **Heavy-Ball 动量格式**：Heavy-Ball 动量格式为
 
 $$
-\theta_{t+1} - \theta_t = \gamma (\theta_{t} - \theta_{t-1}) + \eta \nabla f(\theta_t)
+\theta_{t+1} - \theta_t = \gamma (\theta_{t} - \theta_{t-1}) - \eta \nabla f(\theta_t)
 $$
 
 **现代 Momentum 格式**：现代 Momentum 动量格式为
@@ -32,6 +32,6 @@ $$
 > \eta v_{t+1} = \beta \eta v_t + \eta \nabla f(\theta_t),
 > $$
 >
-> 而根据第二个式子得到 $\eta v_{t+1} = \theta_{t+1} - \theta_t$，因此带入上面的等式得到结论。
+> 而根据第二个式子得到 $-\eta v_{t+1} = \theta_{t+1} - \theta_t$，因此带入上面的等式得到结论。
 
 ‍
