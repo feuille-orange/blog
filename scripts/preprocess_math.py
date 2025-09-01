@@ -58,11 +58,15 @@ def process_markdown_file(filepath):
             # 这个替换必须在处理 `\\` 之后进行，以避免冲突。
             processed_content = re.sub(r'\\\|', r'\\\\|', processed_content)
             
-            # --- 新增：处理大括号 ---
+            # 处理大括号
             # 将 `\{` 和 `\}` 分别替换为 `\\{` 和 `\\}`
             # Zola/Markdown 会将 `\\{` 解析为 `\{`，KaTeX 才能正确识别。
             processed_content = re.sub(r'\\{', r'\\\\{', processed_content)
             processed_content = re.sub(r'\\}', r'\\\\}', processed_content)
+
+            # 将 `\%` 替换为 `\\%`
+            # Zola/Markdown 会将 `\\%` 解析为 `\%`，KaTeX 才能正确识别。
+            processed_content = re.sub(r'\\%', r'\\\\%', processed_content)
             
             return f"{start_delim}{processed_content}{end_delim}"
 
