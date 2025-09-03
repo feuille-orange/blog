@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+Allow: /
+Sitemap: https://feuille-orange.pages.dev/sitemap.xml

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="https://feuille-orange.pages.dev/sitemap_style.xsl" type="text/xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://feuille-orange.pages.dev/</loc>
+    </url>
+    <url>
+        <loc>https://feuille-orange.pages.dev/archive/</loc>
+    </url>
+    <url>
+        <loc>https://feuille-orange.pages.dev/blog/</loc>
+    </url>
+    <url>
+        <loc>https://feuille-orange.pages.dev/projects/</loc>
+    </url>
+    <url>
+        <loc>https://feuille-orange.pages.dev/tags/</loc>
+    </url>
+</urlset>
