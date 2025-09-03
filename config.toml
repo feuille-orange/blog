@@ -1,7 +1,7 @@
-base_url = "https://reichtumqian.pages.dev"
-title = "Reichtum's Blog"
-description = "Reichtum's Blog"
-author = "Reichtum"
+base_url = "https://feuille-orange.pages.dev"
+title = "CC's Blog"
+description = "CC's Blog"
+author = "CC"
 theme = "tabi"
 generate_feeds = true
 compile_sass = true
